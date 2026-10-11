@@ -6,6 +6,8 @@
 
 当前版本：**v0.2.1，早期可用版本**。面向 Windows 10/11 x64，先支持英语和简体中文双向翻译。此版修复了中文安装路径下模型加载失败的问题。
 
+**[⬇ 点击下载 Windows 免安装版（约 188 MB）](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.2.1/TranslatorPet-v0.2.1-windows-x64.zip)** · [使用教程](#使用教程) · [发布页面](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.2.1)
+
 ## 做这个项目的初衷
 
 在使用 GitHub 或阅读英文文章时，我想尝试自己读懂原文，所以不希望直接把整页内容都翻译成中文。但读着读着，总会遇到一些不认识的单词，或是看不懂的句子，需要查一下才能继续。
@@ -16,17 +18,43 @@
 
 源码：[6y-yyyyy/translator-pet](https://github.com/6y-yyyyy/translator-pet)。欢迎提交问题和改进。
 
-## 使用便携版
+## 使用教程
 
-1. 下载完整的 Windows x64 离线包并解压到可写目录。
-2. 双击 `TranslatorPet.exe`。不要单独移动 exe，运行环境和模型也需要保留。
-3. 在网页、文章或 GitHub 复制文字，点击悬浮球 → 粘贴 → 选择上下两个框的语言 → 翻译。
+**适用电脑：Windows 10 / 11，x64（64 位）。当前提供的是免安装 ZIP 压缩包，下载后完整解压即可运行。** 包内已经包含翻译模型和 Python 运行环境，不需要写代码、注册账号或填写 API 密钥。
 
-普通用户不需要安装 Python、不需要注册账号或填写 API 密钥。离线包包含模型，解压后翻译无需联网；只有从源码准备依赖时需要下载。
+### 第一步：下载安装包
 
-需要 .NET Framework 4.8，以及 Microsoft Visual C++ 2015–2022 x64 运行库。Windows 10/11 通常已有 .NET；如果本地引擎提示缺少运行库，可从 [Microsoft 官方页面](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) 安装 x64 版本。无需显卡，使用 CPU。
+点击 **[下载 TranslatorPet-v0.2.1-windows-x64.zip](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.2.1/TranslatorPet-v0.2.1-windows-x64.zip)**，保存到电脑，等待约 188 MB 的文件下载完成。
 
-### 操作
+如果直接下载没有开始，打开 [v0.2.1 发布页面](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.2.1)，找到下方的 **Assets（资源）**，点击 **`TranslatorPet-v0.2.1-windows-x64.zip`**。请按这个完整文件名选择；`source.zip`、`Source code` 和仓库的 `Code → Download ZIP` 都是源码，不能直接运行。
+
+### 第二步：完整解压
+
+在电脑的“下载”文件夹中找到刚下载的 ZIP，右键选择 **“全部解压缩…”**，选择桌面或其他自己方便找到的目录，再点击 **“提取”**。解压后的文件约占 300 MB。
+
+请先完成解压，再打开程序。保留解压出来的整个 `TranslatorPet` 文件夹，里面的 `runtime`、`models`、`engine` 等文件夹都是运行所需的，不要只把 exe 拖出来。
+
+### 第三步：打开悬浮球
+
+进入解压后的 **`TranslatorPet`** 文件夹，双击 **`TranslatorPet.exe`**。如果 Windows 隐藏了文件扩展名，它会显示为 **`TranslatorPet`**，类型是“应用程序”。
+
+启动后，桌面右下角附近会出现一个小悬浮球。可以按住它拖到自己喜欢的位置，点击它就能打开翻译窗口。以后仍然双击这个 exe 启动；也可以右键它，选择“发送到 → 桌面快捷方式”（Windows 11 可能需要先点“显示更多选项”），方便下次打开。
+
+### 第四步：开始翻译
+
+1. 在 GitHub、网页或文章中选中不懂的单词或句子，按 **Ctrl+C** 复制。
+2. 点击桌面上的悬浮球，再点击窗口中的 **“粘贴”**。
+3. 在上方选择原文语言，在下方选择译文语言，例如 **英语 → 简体中文**。
+4. 点击 **“翻译”**，或按 **Ctrl+Enter**；译文会显示在下面的文本框里。
+5. 看懂后点击 **×** 或按 **Esc** 收起窗口，悬浮球会继续留在桌面上。需要退出程序时，右键悬浮球选择 **“退出”**。
+
+首次下载完成后，中英翻译可离线使用，没有每日翻译额度。
+
+### 如果无法启动或提示缺少运行库
+
+程序需要 **.NET Framework 4.8** 和 **Microsoft Visual C++ 2015–2022 x64 运行库**。如果电脑提示缺少相应组件，请从 [Microsoft .NET Framework 4.8 官方下载页](https://dotnet.microsoft.com/en-us/download/dotnet-framework/net48) 选择 **Runtime（运行时）**，或从 [Microsoft Visual C++ 官方页面](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist) 选择 **x64** 运行库安装，再重新打开 `TranslatorPet.exe`。无需安装 Python，也无需独立显卡。
+
+### 更多操作
 
 - 点击圆球：展开 / 收起窗口；按住拖动：移动圆球。
 - 上框选择原文语言，下框选择译文语言；⇅ 交换方向。
