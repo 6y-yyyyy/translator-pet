@@ -15,5 +15,6 @@ $manifestArg = '/win32manifest:' + (Join-Path $sourceRoot 'app.manifest')
 & $compilerPath /nologo /target:winexe /platform:x64 /optimize+ /utf8output ('/out:' + (Join-Path $OutputDirectory 'TranslatorPet.exe')) $manifestArg $resourceArg $referenceArgs $sourceFiles
 if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
 Copy-Item -LiteralPath (Join-Path $sourceRoot 'App.config') -Destination (Join-Path $OutputDirectory 'TranslatorPet.exe.config')
+Copy-Item -LiteralPath (Join-Path $repoRoot 'model.json') -Destination (Join-Path $OutputDirectory 'model.json')
 Set-Content -LiteralPath (Join-Path $OutputDirectory 'portable.marker') -Value 'Portable profile lives in ./data' -Encoding ascii
 Write-Output ('Built: ' + (Join-Path $OutputDirectory 'TranslatorPet.exe'))

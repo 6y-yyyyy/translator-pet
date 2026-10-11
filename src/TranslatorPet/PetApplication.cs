@@ -60,6 +60,8 @@ public partial class PetApplication : Application {
         Status=Find<TextBlock>(Popup,"StatusText"); Count=Find<TextBlock>(Popup,"CountText");
         TranslateButton=Find<Button>(Popup,"TranslateButton"); PasteButton=Find<Button>(Popup,"PasteButton");
         SwapButton=Find<Button>(Popup,"SwapButton"); CopyButton=Find<Button>(Popup,"CopyButton");
+        TranslateButton.Content=Translator.ModelReady ? "翻译  ↵" : "下载模型";
+        if(!Translator.ModelReady) Status.Text="首次使用请先下载模型（约 2.5 GB）";
         foreach(var lang in Languages) { Source.Items.Add(lang); Target.Items.Add(lang); }
         Select(Source,Pref.Source); Select(Target,Pref.Target);
         Source.SelectionChanged+=(s,e)=>Save(); Target.SelectionChanged+=(s,e)=>Save();
@@ -128,23 +130,29 @@ public partial class PetApplication : Application {
         if(string.IsNullOrWhiteSpace(Output.Text)) { Status.Text="还没有可复制的译文"; return; }
         try { Clipboard.SetText(Output.Text); Status.Text="译文已复制"; } catch { Status.Text="剪贴板暂时被占用，请稍后再试"; }
     }
-    async Task RunTranslation() {
+    async Task RunTranslation(bool verifyModel=false) {
+        bool preparing=verifyModel || !Translator.ModelReady;
         string text=Input.Text;
-        if(string.IsNullOrWhiteSpace(text)) { Status.Text="先输入或粘贴需要翻译的文字"; Input.Focus(); return; }
-        if(text.Length>10000) { Status.Text="单次最多 10,000 字，请缩短文字后重试"; return; }
-        var pending=new CancellationTokenSource(TimeSpan.FromMinutes(3)); Pending=pending;
+        if(!preparing && string.IsNullOrWhiteSpace(text)) { Status.Text="先输入或粘贴需要翻译的文字"; Input.Focus(); return; }
+        if(!preparing && text.Length>10000) { Status.Text="单次最多 10,000 字，请缩短文字后重试"; return; }
+        var pending=new CancellationTokenSource(preparing ? TimeSpan.FromHours(2) : TimeSpan.FromMinutes(15)); Pending=pending;
         Input.IsReadOnly=true; Source.IsEnabled=Target.IsEnabled=PasteButton.IsEnabled=SwapButton.IsEnabled=false;
         Find<Button>(Popup,"ClearButton").IsEnabled=false; CopyButton.IsEnabled=false;
         TranslateButton.Content="取消"; Output.Clear();
         try {
-            Output.Text=await Translator.Translate(text,((Language)Source.SelectedItem).Code,((Language)Target.SelectedItem).Code,s=>Status.Text=s,pending.Token);
-            Status.Text="翻译完成 · 本地离线模型";
-        } catch(OperationCanceledException) { Status.Text="翻译已取消或请求超时，请重试"; }
-        catch(Exception e) { Status.Text=e is ArgumentException || e is InvalidOperationException ? "本地引擎响应异常，请重试" : e.Message; }
+            if(preparing) {
+                await Translator.Prepare(s=>Status.Text=s,pending.Token);
+                Status.Text="模型已就绪，点击翻译即可离线使用";
+            } else {
+                Output.Text=await Translator.Translate(text,((Language)Source.SelectedItem).Code,((Language)Target.SelectedItem).Code,s=>Status.Text=s,pending.Token,s=>Output.Text=s);
+                Status.Text="翻译完成 · Qwen 增强离线模型";
+            }
+        } catch(OperationCanceledException) { Output.Clear(); Status.Text=preparing ? "下载已取消，重试时继续下载" : "翻译已取消或超时，未完成的译文已清除"; }
+        catch(Exception e) { Output.Clear(); Status.Text=e is ArgumentException || e is InvalidOperationException ? "本地引擎响应异常，请重试" : e.Message; }
         finally {
             Pending=null; pending.Dispose(); Input.IsReadOnly=false;
             Source.IsEnabled=Target.IsEnabled=PasteButton.IsEnabled=SwapButton.IsEnabled=CopyButton.IsEnabled=true;
-            Find<Button>(Popup,"ClearButton").IsEnabled=true; TranslateButton.Content="翻译  ↵";
+            Find<Button>(Popup,"ClearButton").IsEnabled=true; TranslateButton.Content=Translator.ModelReady ? "翻译  ↵" : "下载模型";
         }
     }
     ContextMenu BuildMenu() {
@@ -156,7 +164,8 @@ public partial class PetApplication : Application {
         var sizes=new MenuItem { Header="桌宠大小" };
         foreach(int n in new[]{40,48,64}) { int size=n; Add(sizes,n+" 像素"+(n==48 ? "（默认）" : ""),()=> { Pref.Size=size; Pet.Width=Pet.Height=size+12; ClampPet(); Save(); }); }
         menu.Items.Add(sizes); Add(menu,"重置位置",ResetPosition);
-        menu.Items.Add(new Separator()); Add(menu,"使用说明",()=> { MessageBox.Show("点击圆球：展开 / 收起翻译窗口\n按住拖动：移动圆球\n右键圆球：换形象、调大小、退出\nCtrl+Enter：翻译；Esc：收起窗口\n\n默认英语 → 简体中文，两种语言均可选择。\n中英翻译在本机完成，不上传原文，无每日次数额度。首次使用需备好语言模型。不会自动读取剪贴板。\n\n自定义皮肤支持 PNG、JPG、BMP、GIF；推荐透明 PNG。第一版为静态皮肤，GIF 仅显示一帧。\n关闭翻译窗口不会退出程序，退出请使用右键菜单或系统托盘。", "随身翻译 · 使用说明"); });
+        Add(menu,"下载 / 校验离线模型",async()=> { OpenPopup(); if(Pending==null) await RunTranslation(true); });
+        menu.Items.Add(new Separator()); Add(menu,"使用说明",()=> { MessageBox.Show("点击圆球：展开 / 收起翻译窗口\n按住拖动：移动圆球\n右键圆球：换形象、调大小、退出\nCtrl+Enter：翻译；Esc：收起窗口\n\n默认英语 → 简体中文，两种语言均可选择。\n中英翻译在本机完成，不上传原文，无每日次数额度。首次使用请点击下载模型（约 2.5 GB）。增强模型更占内存，生成译文需要一些时间。不会自动读取剪贴板。\n\n自定义皮肤支持 PNG、JPG、BMP、GIF；推荐透明 PNG。第一版为静态皮肤，GIF 仅显示一帧。\n关闭翻译窗口不会退出程序，退出请使用右键菜单或系统托盘。", "随身翻译 · 使用说明"); });
         Add(menu,"退出",Quit); return menu;
     }
     static void Add(ItemsControl parent,string title,Action action) { var m=new MenuItem { Header=title }; m.Click+=(s,e)=>action(); parent.Items.Add(m); }

@@ -70,6 +70,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, default=REPO / "dist" / "TranslatorPet")
     parser.add_argument("--cache", type=Path, default=REPO / ".cache")
+    parser.add_argument("--with-model", action="store_true")
     args = parser.parse_args()
     output, cache = args.output.resolve(), args.cache.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -84,11 +85,18 @@ def main():
         elif asset["kind"] == "model":
             extract(path, output / "models" / asset["pair"], model=True)
         print("Ready: " + asset["name"], flush=True)
+    if args.with_model:
+        model = lock["model"]
+        path = download(model, cache)
+        (output / "models").mkdir(exist_ok=True)
+        destination = output / "models" / model["name"]
+        if not destination.exists() or not verify(destination, model["sha256"]):
+            shutil.copy2(path, destination)
     (output / "runtime" / "python313._pth").write_text("python313.zip\n.\nLib/site-packages\nimport site\n", encoding="ascii")
     (output / "runtime" / "Lib" / "site-packages" / "ctranslate2" / "cudnn64_9.dll").unlink(missing_ok=True)
     shutil.copytree(REPO / "engine", output / "engine", dirs_exist_ok=True, ignore=shutil.ignore_patterns("__pycache__"))
     (output / "portable.marker").write_text("Portable profile lives in ./data\n", encoding="utf-8")
-    for name in ("README.md", "README.en.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "dependencies.lock.json"):
+    for name in ("README.md", "README.en.md", "CHANGELOG.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "dependencies.lock.json", "model.json"):
         if (REPO / name).exists():
             shutil.copy2(REPO / name, output / name)
     if (REPO / "licenses").exists():

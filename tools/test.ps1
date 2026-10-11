@@ -14,7 +14,7 @@ Get-Content -LiteralPath (Join-Path $testOutput 'ui-verification.txt')
 if ($WithModels) {
     $pythonPath = Join-Path $ReleaseDirectory 'runtime\python.exe'
     $env:TRANSLATORPET_TEST_RELEASE = $ReleaseDirectory
-    & $pythonPath -X utf8 (Join-Path $repoRoot 'tests\test_worker.py') -v
+    & $pythonPath -X utf8 -m unittest discover -s (Join-Path $repoRoot 'tests') -p 'test_*.py' -v
     if ($LASTEXITCODE -ne 0) { throw 'Offline engine tests failed.' }
     $frameworkPath = Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319'
     $interopPath = Join-Path $ReleaseDirectory 'TranslatorPet.IntegrationTests.exe'

@@ -19,6 +19,9 @@ namespace TranslatorPet { public partial class PetApplication {
     public void Preview(string folder) {
         Directory.CreateDirectory(folder); OpenPopup();
         var checks=new List<string>();
+        string expectedAction=Translator.ModelReady ? "翻译  ↵" : "下载模型";
+        if(Convert.ToString(TranslateButton.Content)!=expectedAction) throw new Exception("模型状态与按钮不一致");
+        checks.Add("PASS: model readiness controls download/translate action");
         string oldSkin=Pref.Skin;
         foreach(string skin in new[]{"orb","cat","robot"}) { ChangeSkin(skin); if(Pet.Content==null) throw new Exception("皮肤加载失败"); }
         ChangeSkin(oldSkin); checks.Add("PASS: all three built-in skins render");

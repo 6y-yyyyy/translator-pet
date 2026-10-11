@@ -13,7 +13,7 @@ jobs:
         run: ./tools/build.ps1
       - name: Prepare pinned models and runtime
         shell: powershell
-        run: ./tools/prepare-runtime.ps1
+        run: ./tools/prepare-runtime.ps1 -WithModel
       - name: Verify offline operation
         shell: powershell
         run: ./tools/test.ps1 -WithModels
@@ -22,6 +22,6 @@ jobs:
         run: ./tools/package.ps1
       - uses: actions/upload-artifact@v4
         with:
-          name: TranslatorPet-v0.2.1-windows-x64
-          path: artifacts/TranslatorPet-v0.2.1-windows-x64.zip
+          name: TranslatorPet-v0.3.0-windows-x64
+          path: artifacts/TranslatorPet-v0.3.0-windows-x64.zip
           retention-days: 14

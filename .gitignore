@@ -14,3 +14,5 @@ diagnostics.txt
 *.zip
 *.argosmodel
 *.whl
+*.gguf
+*.part

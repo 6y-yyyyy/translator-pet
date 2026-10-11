@@ -1,4 +1,4 @@
-param([string]$OutputDirectory = '', [string]$CacheDirectory = '')
+param([string]$OutputDirectory = '', [string]$CacheDirectory = '', [switch]$WithModel)
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 if (-not $OutputDirectory) { $OutputDirectory = Join-Path $repoRoot 'dist\TranslatorPet' }
@@ -17,5 +17,7 @@ if ((Get-FileHash -LiteralPath $archivePath -Algorithm SHA256).Hash.ToLowerInvar
 # A separate bootstrap interpreter avoids overwriting a running runtime executable.
 $bootstrapPath = Join-Path $CacheDirectory 'bootstrap-python'
 Expand-Archive -LiteralPath $archivePath -DestinationPath $bootstrapPath -Force
-& (Join-Path $bootstrapPath 'python.exe') -I -X utf8 (Join-Path $PSScriptRoot 'prepare_runtime.py') --output $OutputDirectory --cache $CacheDirectory
+$modelArgs = @()
+if ($WithModel) { $modelArgs = @('--with-model') }
+& (Join-Path $bootstrapPath 'python.exe') -I -X utf8 (Join-Path $PSScriptRoot 'prepare_runtime.py') --output $OutputDirectory --cache $CacheDirectory @modelArgs
 if ($LASTEXITCODE -ne 0) { throw 'Runtime/model preparation failed.' }

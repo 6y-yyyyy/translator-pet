@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-10-11
+
+- Upgrade local inference to Qwen3-4B-Instruct-2507 Q4_K_M with llama.cpp CPU runtime.
+- Preserve multi-line context and stream draft translations into the window.
+- Clarify the specific warning idiom “here be dragons” without replacing literal stories/maps or inline code.
+- Add explicit, resumable 2.5 GB model download and SHA-256 validation. Translation stays offline.
+- Add real regression coverage for warnings, identifiers, negation and code comments.
+- Publish a smaller app ZIP; the model is downloaded once from the UI. Higher memory use and slower inference than v0.2.x are expected.
+
 ## 0.2.1 — 2026-10-11
 
 - Fix offline model loading when the installation path contains Chinese or other non-ASCII characters on Windows.
