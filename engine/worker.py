@@ -65,8 +65,14 @@ def translate(request):
         raise ValueError("缺少离线语言包，请使用完整离线发布包，或按 README 运行模型准备脚本。")
     import ctranslate2
     import sentencepiece
-    tokenizer = sentencepiece.SentencePieceProcessor(model_file=str(model_dir / "sentencepiece.model"))
-    translator = ctranslate2.Translator(str(model_dir / "model"), device="cpu", compute_type="int8", inter_threads=1, intra_threads=min(4, os.cpu_count() or 1))
+    # Python handles Unicode paths on Windows; native file loaders may not.
+    tokenizer = sentencepiece.SentencePieceProcessor(model_proto=(model_dir / "sentencepiece.model").read_bytes())
+    model_path = model_dir / "model"
+    files = None
+    if os.name == "nt" and not str(model_path).isascii():
+        files = {path.name: path.read_bytes() for path in model_path.iterdir() if path.is_file()}
+    translator = ctranslate2.Translator(str(model_path) if files is None else "local-model", files=files, device="cpu", compute_type="int8", inter_threads=1, intra_threads=min(4, os.cpu_count() or 1))
+    del files
     metadata = json.loads((model_dir / "metadata.json").read_text(encoding="utf-8"))
     prefix = metadata.get("target_prefix")
     plan = []

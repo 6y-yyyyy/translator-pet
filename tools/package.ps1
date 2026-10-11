@@ -2,7 +2,7 @@ param([string]$ReleaseDirectory = '', [string]$Destination = '')
 $ErrorActionPreference = 'Stop'
 $repoRoot = Split-Path -Parent $PSScriptRoot
 if (-not $ReleaseDirectory) { $ReleaseDirectory = Join-Path $repoRoot 'dist\TranslatorPet' }
-if (-not $Destination) { $Destination = Join-Path $repoRoot 'artifacts\TranslatorPet-v0.2.0-windows-x64.zip' }
+if (-not $Destination) { $Destination = Join-Path $repoRoot 'artifacts\TranslatorPet-v0.2.1-windows-x64.zip' }
 $ReleaseDirectory = [IO.Path]::GetFullPath($ReleaseDirectory)
 $Destination = [IO.Path]::GetFullPath($Destination)
 foreach ($required in @('TranslatorPet.exe','TranslatorPet.exe.config','runtime\python.exe','engine\worker.py','models\en_zh\model\model.bin','models\zh_en\model\model.bin','LICENSE','THIRD_PARTY_NOTICES.md','licenses\CC-BY-4.0.txt')) {

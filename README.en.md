@@ -2,7 +2,7 @@
 
 A compact Windows desktop companion for local English ↔ Simplified Chinese translation. Click the floating orb to open the translation window. Translation is offline, with no daily service quota, account, API key, or remote fallback.
 
-Version **0.2.0 — early usable release**. Windows 10/11 x64, .NET Framework 4.8 and Microsoft Visual C++ 2015–2022 x64 runtime are required. CPU inference; no GPU required.
+Version **0.2.1 — early usable release**. Windows 10/11 x64, .NET Framework 4.8 and Microsoft Visual C++ 2015–2022 x64 runtime are required. CPU inference; no GPU required. This patch fixes model loading from installation paths containing Chinese or other non-ASCII characters.
 
 ## Run
 

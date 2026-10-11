@@ -3,6 +3,8 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import shutil
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -52,11 +54,11 @@ class InputTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get("TRANSLATORPET_TEST_RELEASE"), "Set TRANSLATORPET_TEST_RELEASE to test installed models")
 class OfflineIntegrationTests(unittest.TestCase):
-    def invoke(self, text, source, target, bom=False):
+    def invoke(self, text, source, target, bom=False, worker_path=None):
         release = Path(os.environ["TRANSLATORPET_TEST_RELEASE"])
         env = dict(os.environ, TRANSLATORPET_DISABLE_NETWORK="1")
         request = ("\ufeff" if bom else "") + json.dumps({"text": text, "source": source, "target": target})
-        result = subprocess.run([str(release / "runtime" / "python.exe"), "-I", "-X", "utf8", str(release / "engine" / "worker.py")], input=request, encoding="utf-8", capture_output=True, timeout=90, env=env)
+        result = subprocess.run([str(release / "runtime" / "python.exe"), "-I", "-X", "utf8", str(worker_path or release / "engine" / "worker.py")], input=request, encoding="utf-8", capture_output=True, timeout=90, env=env)
         events = [json.loads(line) for line in result.stdout.splitlines()]
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         return next(e["text"] for e in events if e["type"] == "result")
@@ -79,6 +81,18 @@ class OfflineIntegrationTests(unittest.TestCase):
 
     def test_utf8_bom_protocol(self):
         self.assertEqual(self.invoke("Unicode 世界", "en", "en", bom=True), "Unicode 世界")
+
+    def test_models_in_unicode_directory(self):
+        release = Path(os.environ["TRANSLATORPET_TEST_RELEASE"])
+        scratch = REPO / "artifacts" / "path-tests"
+        scratch.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix="TranslatorPet-", dir=scratch) as folder:
+            relocated = Path(folder) / "中文 路径 😀"
+            shutil.copytree(release / "engine", relocated / "engine")
+            shutil.copytree(release / "models", relocated / "models")
+            worker_path = relocated / "engine" / "worker.py"
+            self.assertIn("开源", self.invoke("This project is open source.", "en", "zh-CN", worker_path=worker_path))
+            self.assertIn("install", self.invoke("请阅读安装说明。", "zh-CN", "en", worker_path=worker_path).lower())
 
 
 if __name__ == "__main__":

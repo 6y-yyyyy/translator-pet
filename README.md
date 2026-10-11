@@ -4,7 +4,7 @@
 
 [English](README.en.md) · [贡献指南](CONTRIBUTING.md) · [第三方许可](THIRD_PARTY_NOTICES.md)
 
-当前版本：**v0.2.0，早期可用版本**。面向 Windows 10/11 x64，先支持英语和简体中文双向翻译。
+当前版本：**v0.2.1，早期可用版本**。面向 Windows 10/11 x64，先支持英语和简体中文双向翻译。此版修复了中文安装路径下模型加载失败的问题。
 
 ![翻译窗口](docs/translation-window.png)
 
