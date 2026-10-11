@@ -4,6 +4,12 @@ A compact Windows desktop companion for local English ↔ Simplified Chinese tra
 
 Version **0.2.1 — early usable release**. Windows 10/11 x64, .NET Framework 4.8 and Microsoft Visual C++ 2015–2022 x64 runtime are required. CPU inference; no GPU required. This patch fixes model loading from installation paths containing Chinese or other non-ASCII characters.
 
+## Why I made this
+
+When browsing GitHub or reading English articles, I want to try understanding the original text myself, so I prefer to keep the page in English. But I often come across an unfamiliar word or a sentence I cannot understand and need a little help before I can keep reading.
+
+I wanted a small tool that stays out of the way and is always within reach: a tiny floating orb on the desktop. When I get stuck, I can copy the text, click the orb, paste it and translate. Once I understand it, I can close the popup and return to the original text. I hope it helps others who like to read this way too.
+
 ## Run
 
 Extract the complete portable release and launch `TranslatorPet.exe`. Keep its `runtime`, `models` and `engine` folders together. No Python installation is required. Copy text, click the orb, paste, choose source / target languages, and translate. Ctrl+Enter translates; Esc hides the popup. Drag the orb to move it. Right-click for size, static skins and exit.
