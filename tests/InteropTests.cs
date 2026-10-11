@@ -5,6 +5,7 @@ using TranslatorPet;
 public static class InteropTests {
     public static int Main() {
         try {
+            Console.InputEncoding=new System.Text.UTF8Encoding(true);
             Environment.SetEnvironmentVariable("TRANSLATORPET_DISABLE_NETWORK","1");
             string en=Translator.Translate("This project is open source.","en","zh-CN",s=>{},CancellationToken.None).GetAwaiter().GetResult();
             if(!en.Contains("开源")) throw new Exception("English to Chinese failed");

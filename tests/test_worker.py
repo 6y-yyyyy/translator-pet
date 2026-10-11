@@ -52,10 +52,11 @@ class InputTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get("TRANSLATORPET_TEST_RELEASE"), "Set TRANSLATORPET_TEST_RELEASE to test installed models")
 class OfflineIntegrationTests(unittest.TestCase):
-    def invoke(self, text, source, target):
+    def invoke(self, text, source, target, bom=False):
         release = Path(os.environ["TRANSLATORPET_TEST_RELEASE"])
         env = dict(os.environ, TRANSLATORPET_DISABLE_NETWORK="1")
-        result = subprocess.run([str(release / "runtime" / "python.exe"), "-I", "-X", "utf8", str(release / "engine" / "worker.py")], input=json.dumps({"text": text, "source": source, "target": target}), encoding="utf-8", capture_output=True, timeout=90, env=env)
+        request = ("\ufeff" if bom else "") + json.dumps({"text": text, "source": source, "target": target})
+        result = subprocess.run([str(release / "runtime" / "python.exe"), "-I", "-X", "utf8", str(release / "engine" / "worker.py")], input=request, encoding="utf-8", capture_output=True, timeout=90, env=env)
         events = [json.loads(line) for line in result.stdout.splitlines()]
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         return next(e["text"] for e in events if e["type"] == "result")
@@ -75,6 +76,9 @@ class OfflineIntegrationTests(unittest.TestCase):
         result = self.invoke("Hello world.\n\nThis is a test.", "en", "zh-CN")
         self.assertIn("\n\n", result)
         self.assertTrue(all(piece.strip() for piece in result.split("\n\n")))
+
+    def test_utf8_bom_protocol(self):
+        self.assertEqual(self.invoke("Unicode 世界", "en", "en", bom=True), "Unicode 世界")
 
 
 if __name__ == "__main__":

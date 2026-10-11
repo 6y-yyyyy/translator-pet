@@ -106,7 +106,9 @@ def main():
     if os.environ.get("TRANSLATORPET_DISABLE_NETWORK") == "1":
         block_network()
     try:
-        request = json.loads(sys.stdin.readline(MAX_TEXT * 12 + 4096))
+        # .NET Framework's redirected stdin may emit a UTF-8 BOM depending on
+        # the host console encoding. Accept it at the protocol boundary only.
+        request = json.loads(sys.stdin.readline(MAX_TEXT * 12 + 4096).lstrip("\ufeff"))
         if not isinstance(request, dict):
             raise ValueError("请求格式不正确。")
         emit("result", text=translate(request))
