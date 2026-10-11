@@ -1,0 +1,27 @@
+name: Prepare offline portable artifact
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  portable:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        shell: powershell
+        run: ./tools/build.ps1
+      - name: Prepare pinned models and runtime
+        shell: powershell
+        run: ./tools/prepare-runtime.ps1
+      - name: Verify offline operation
+        shell: powershell
+        run: ./tools/test.ps1 -WithModels
+      - name: Package
+        shell: powershell
+        run: ./tools/package.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TranslatorPet-v0.2.0-windows-x64
+          path: artifacts/TranslatorPet-v0.2.0-windows-x64.zip
+          retention-days: 14

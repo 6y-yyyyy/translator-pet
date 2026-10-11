@@ -1,0 +1,16 @@
+.cache/
+dist/
+artifacts/
+bin/
+obj/
+.vs/
+__pycache__/
+*.pyc
+*.user
+data/
+preferences.json
+custom-skin.*
+diagnostics.txt
+*.zip
+*.argosmodel
+*.whl
