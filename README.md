@@ -4,9 +4,9 @@
 
 [English](README.en.md) · [贡献指南](CONTRIBUTING.md) · [第三方许可](THIRD_PARTY_NOTICES.md)
 
-当前版本：**v0.3.0，早期可用版本**。面向 Windows 10/11 x64，先支持英语和简体中文双向翻译。此版升级为 Qwen3-4B-Instruct-2507 增强离线模型，优先改善英文阅读和技术注释的翻译质量。
+当前版本：**v0.3.1，早期可用版本**。面向 Windows 10/11 x64，先支持英语和简体中文双向翻译。此版升级为 Qwen3-4B-Instruct-2507 增强离线模型，优先改善英文阅读和技术注释的翻译质量。
 
-**[⬇ 点击下载 Windows 免安装版（程序包）](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.0/TranslatorPet-v0.3.0-windows-x64.zip)** · [使用教程](#使用教程) · [发布页面](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.0)
+**[⬇ 点击下载 Windows 免安装版（程序包）](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.1/TranslatorPet-v0.3.1-windows-x64.zip)** · [使用教程](#使用教程) · [发布页面](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.1)
 
 ## 做这个项目的初衷
 
@@ -24,9 +24,9 @@
 
 ### 第一步：下载安装包
 
-点击 **[下载 TranslatorPet-v0.3.0-windows-x64.zip](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.0/TranslatorPet-v0.3.0-windows-x64.zip)**，保存到电脑，等待程序包下载完成。模型会在第四步单独下载。
+点击 **[下载 TranslatorPet-v0.3.1-windows-x64.zip](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.1/TranslatorPet-v0.3.1-windows-x64.zip)**，保存到电脑，等待程序包下载完成。模型会在第四步单独下载。
 
-如果直接下载没有开始，打开 [v0.3.0 发布页面](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.0)，找到下方的 **Assets（资源）**，点击 **`TranslatorPet-v0.3.0-windows-x64.zip`**。请按这个完整文件名选择；`source.zip`、`Source code` 和仓库的 `Code → Download ZIP` 都是源码，不能直接运行。
+如果直接下载没有开始，打开 [v0.3.1 发布页面](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.1)，找到下方的 **Assets（资源）**，点击 **`TranslatorPet-v0.3.1-windows-x64.zip`**。请按这个完整文件名选择；`source.zip`、`Source code` 和仓库的 `Code → Download ZIP` 都是源码，不能直接运行。
 
 ### 第二步：完整解压
 

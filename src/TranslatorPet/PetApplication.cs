@@ -180,7 +180,14 @@ public partial class PetApplication : Application {
             ChangeSkin(Path.GetFileName(dest));
         } catch(Exception e) { MessageBox.Show("导入失败："+e.Message,"随身翻译"); }
     }
-    static BitmapImage LoadBitmap(string path) { var b=new BitmapImage(); b.BeginInit(); b.CacheOption=BitmapCacheOption.OnLoad; b.UriSource=new Uri(Path.GetFullPath(path)); b.DecodePixelWidth=512; b.EndInit(); b.Freeze(); return b; }
+    static BitmapImage LoadBitmap(string path) {
+        // Imported skins overwrite the same filename. Read bytes directly so WPF's
+        // URI image cache cannot return the previous skin for that filename.
+        using(var stream=File.OpenRead(Path.GetFullPath(path))) {
+            var b=new BitmapImage(); b.BeginInit(); b.CacheOption=BitmapCacheOption.OnLoad;
+            b.StreamSource=stream; b.DecodePixelWidth=512; b.EndInit(); b.Freeze(); return b;
+        }
+    }
     void ChangeSkin(string skin) { Pref.Skin=skin; SetSkin(); Save(); }
     void SetSkin() {
         FrameworkElement art=null;

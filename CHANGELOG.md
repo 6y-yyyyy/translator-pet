@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1 — 2026-10-12
+
+- Fix custom skin replacements showing the first imported image because of WPF URI caching.
+- Load images from an eagerly decoded file stream and release the file immediately.
+- Add UI regression checks for three consecutive replacements of PNG, JPG, BMP and GIF images.
+- The offline model is unchanged; existing users do not need to download it again.
+
 ## 0.3.0 — 2026-10-11
 
 - Upgrade local inference to Qwen3-4B-Instruct-2507 Q4_K_M with llama.cpp CPU runtime.

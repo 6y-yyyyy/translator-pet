@@ -2,9 +2,9 @@
 
 A compact Windows desktop companion for local English ↔ Simplified Chinese translation. Click the floating orb to open the translation window. Translation is offline, with no daily service quota, account, API key, or remote fallback.
 
-Version **0.3.0 — early usable release**. Windows 10/11 x64, .NET Framework 4.8 and Microsoft Visual C++ 2015–2022 x64 runtime are required. CPU inference; no GPU required. This release upgrades to Qwen3-4B-Instruct-2507 Q4_K_M for better contextual translation.
+Version **0.3.1 — early usable release**. Windows 10/11 x64, .NET Framework 4.8 and Microsoft Visual C++ 2015–2022 x64 runtime are required. CPU inference; no GPU required. This release upgrades to Qwen3-4B-Instruct-2507 Q4_K_M for better contextual translation.
 
-**[⬇ Download for Windows — portable app ZIP](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.0/TranslatorPet-v0.3.0-windows-x64.zip)** · [Getting started](#getting-started) · [Release page](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.0)
+**[⬇ Download for Windows — portable app ZIP](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.1/TranslatorPet-v0.3.1-windows-x64.zip)** · [Getting started](#getting-started) · [Release page](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.1)
 
 ## Why I made this
 
@@ -16,7 +16,7 @@ I wanted a small tool that stays out of the way and is always within reach: a ti
 
 For **Windows 10 / 11 x64**. This is a portable ZIP: extract it and run the app. It includes Python; the first use requires a separate 2.5 GB model download in the app. No account or API key is required. At least 8 GB RAM and about 4 GB free disk space are recommended; broad hardware testing is still pending.
 
-1. **Download:** click [TranslatorPet-v0.3.0-windows-x64.zip](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.0/TranslatorPet-v0.3.0-windows-x64.zip) and wait for the app download to finish. Alternatively, open the [release page](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.0), expand **Assets**, and select that exact filename. The source archives and **Code → Download ZIP** contain source code, not the runnable app.
+1. **Download:** click [TranslatorPet-v0.3.1-windows-x64.zip](https://github.com/6y-yyyyy/translator-pet/releases/download/v0.3.1/TranslatorPet-v0.3.1-windows-x64.zip) and wait for the app download to finish. Alternatively, open the [release page](https://github.com/6y-yyyyy/translator-pet/releases/tag/v0.3.1), expand **Assets**, and select that exact filename. The source archives and **Code → Download ZIP** contain source code, not the runnable app.
 2. **Extract:** find the ZIP in Downloads, right-click it, choose **Extract All…**, and select a folder such as your Desktop. Leave enough free space for the additional model download. Keep the entire `TranslatorPet` folder, including `runtime`, `models` and `engine`; do not move the exe on its own or run it inside the ZIP.
 3. **Launch:** open the extracted `TranslatorPet` folder and double-click **`TranslatorPet.exe`**. If extensions are hidden, its name is **TranslatorPet** and its type is **Application**. The orb appears near the bottom-right of the desktop. Drag it to move it; click it to open the translation window. You can create a desktop shortcut to this exe for later use.
 4. **Prepare the model:** click **下载模型** (Download model). The app downloads and verifies the pinned 2.5 GB model, with progress and resumable downloads. No input text is sent. Once ready, the button changes to **翻译** (Translate).
